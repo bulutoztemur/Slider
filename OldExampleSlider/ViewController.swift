@@ -14,7 +14,7 @@ class ViewController: UIViewController {
         sv.axis = .horizontal
         sv.alignment = .center
         sv.distribution = .equalSpacing
-        sv.spacing = 30
+        sv.spacing = 4
         return sv
     }()
     
@@ -37,8 +37,8 @@ class ViewController: UIViewController {
             x.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             x.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
-            bar.heightAnchor.constraint(equalToConstant: 10),
-            bar.widthAnchor.constraint(equalToConstant: 70),
+            bar.heightAnchor.constraint(equalToConstant: 4),
+            bar.widthAnchor.constraint(equalToConstant: 16),
 
         ])
         
@@ -74,14 +74,14 @@ class ViewController: UIViewController {
 class Dot: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        layer.cornerRadius = 5
+        layer.cornerRadius = 2
         backgroundColor = .clear
         layer.backgroundColor = UIColor.red.cgColor
         translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: 10),
-            widthAnchor.constraint(equalToConstant: 10),
+            heightAnchor.constraint(equalToConstant: 4),
+            widthAnchor.constraint(equalToConstant: 4),
         ])
 
 
