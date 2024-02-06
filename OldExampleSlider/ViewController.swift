@@ -9,126 +9,41 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var x: UIStackView = {
-       var sv = UIStackView()
-        sv.axis = .horizontal
-        sv.alignment = .center
-        sv.distribution = .equalSpacing
-        sv.spacing = 4
-        return sv
-    }()
-    
-    var timer = Timer()
-    var bar = PlainHorizontalProgressBar()
-    
-    var dot1 = Dot()
-    var dot2 = Dot()
+    let sliderView = SliderView()
+    private var sliderData = [SliderView.SliderData]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        view.backgroundColor = .black
+        sliderData.append(.init(bgColor: .red))
+        sliderData.append(.init(bgColor: .green))
+        sliderData.append(.init(bgColor: .blue))        
+        
+        view.addSubview(sliderView)
+        sliderView.translatesAutoresizingMaskIntoConstraints = false
 
-        x.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(x)
-        
-        timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
-        
         NSLayoutConstraint.activate([
-            x.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            x.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            
-            bar.heightAnchor.constraint(equalToConstant: 4),
-            bar.widthAnchor.constraint(equalToConstant: 16),
-
-        ])
-        
-        view.backgroundColor = .blue
-        x.addArrangedSubview(bar)
-        x.addArrangedSubview(dot1)
-        x.addArrangedSubview(dot2)
-    }
-    
-    @objc func updateProgress() {
-        if bar.progress > 1.00 {
-            timer.invalidate()
-            
-            let y = Dot()
-            
-            if let index = x.arrangedSubviews.firstIndex(of: bar) {
-                let circularIndex = (index + 1) % (x.arrangedSubviews.count)
-                // x.arrangedSubviews[index].removeFromSuperview()
-                self.bar.removeFromSuperview()
-                bar.progress = 0
-                timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
-                x.insertArrangedSubview(bar, at: circularIndex)
-                // x.insertArrangedSubview(y, at: circularIndex)
-            }
-
-        }
-        bar.progress += 1 / 40
-        
-    }
-    
-}
-
-class Dot: UIView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        layer.cornerRadius = 2
-        backgroundColor = .clear
-        layer.backgroundColor = UIColor.red.cgColor
-        translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: 4),
-            widthAnchor.constraint(equalToConstant: 4),
+            sliderView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            sliderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            sliderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            sliderView.heightAnchor.constraint(equalToConstant: 450)
         ])
 
-
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        sliderView.configureView(with: sliderData)
+    }
+
+    func generateRandomColor() -> UIColor {
+      let hue : CGFloat = CGFloat(arc4random() % 256) / 256 // use 256 to get full range from 0.0 to 1.0
+      let saturation : CGFloat = CGFloat(arc4random() % 128) / 256 + 0.5 // from 0.5 to 1.0 to stay away from white
+      let brightness : CGFloat = CGFloat(arc4random() % 128) / 256 + 0.5 // from 0.5 to 1.0 to stay away from black
+            
+      return UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: 1)
     }
 }
 
 
-@IBDesignable
-class PlainHorizontalProgressBar: UIView {
-    @IBInspectable var color: UIColor = .red {
-        didSet { setNeedsDisplay() }
-    }
-    
-    var progress: CGFloat = 0 {
-        didSet { setNeedsDisplay() }
-    }
-    
-    private let progressLayer = CALayer()
-    private let backgroundMask = CAShapeLayer()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupLayers()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupLayers()
-    }
-    
-    private func setupLayers() {
-        layer.addSublayer(progressLayer)
-    }
-    
-    override func draw(_ rect: CGRect) {
-        backgroundColor?.setFill()
-        backgroundMask.path = UIBezierPath(roundedRect: rect, cornerRadius: rect.height * 0.5).cgPath
-        backgroundMask.backgroundColor = UIColor.orange.cgColor
-        backgroundMask.fillColor = UIColor.black.cgColor
-        layer.mask = backgroundMask
-        let progressRect = CGRect(origin: .zero, size: CGSize(width: rect.width * progress, height: rect.height))
-        
-        progressLayer.frame = progressRect
-        progressLayer.backgroundColor = color.cgColor
-    }
-}
+
