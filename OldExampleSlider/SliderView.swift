@@ -94,7 +94,7 @@ class SliderView: UIView {
         addSubview(pageIndicatorView)
         
         NSLayoutConstraint.activate([
-            pageIndicatorView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            pageIndicatorView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
             pageIndicatorView.heightAnchor.constraint(equalToConstant: 4),
             pageIndicatorView.widthAnchor.constraint(equalTo: widthAnchor)
         ])
