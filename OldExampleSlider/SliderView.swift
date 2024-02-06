@@ -50,6 +50,9 @@ class SliderView: UIView {
         }
     }
     
+    // To make collectionView infinite loop
+    private let numberOfBufferItem = 1
+    
     var currentPage: Int = 0 {
         didSet {
             currentPage = currentPage % sliderData.count
@@ -118,7 +121,7 @@ extension SliderView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sliderData.count + 1
+        return sliderData.count + numberOfBufferItem
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
