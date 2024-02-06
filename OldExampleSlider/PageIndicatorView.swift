@@ -9,10 +9,15 @@ import UIKit
  
 class PageIndicatorView: UIView {
     
+    // if timerCount is true, timer does not increase progress bar. Set false when long press gesture.
     var timerCount = true
+    // Set true to deactivate timer logic, slides can be changed only by manually
     var autoScrollEnabled: Bool = true
+    // Slide change time period
     let timePeriod: CGFloat = 2
+    // Timer interval, progress bar works smoothly with value 0.05
     let timeInterval: TimeInterval = 0.05
+    // Total page number. Create (page count - 1) dots. (-1) reason is that there will be 1 line.
     var pageCount: Int = 0 {
         didSet {
             if pageCount == 0 { return }
@@ -22,6 +27,8 @@ class PageIndicatorView: UIView {
         }
     }
     
+    var timer = Timer()
+    var bar = ProgressBarIndicator()
     var sliderViewDelegate: SliderViewDelegate? = nil
 
     var currentPage = 0 {
@@ -40,9 +47,6 @@ class PageIndicatorView: UIView {
         return sv
     }()
     
-    var timer = Timer()
-    var bar = ProgressBarIndicator()
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
