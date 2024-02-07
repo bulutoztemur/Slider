@@ -9,8 +9,8 @@ import UIKit
  
 class PageIndicatorView: UIView {
     
-    // if timerCount is true, timer does not increase progress bar. Set false when long press gesture.
-    var timerCount = true
+    // if isProgressBarStopped is true, progress bar does not go. Set true when long press gesture.
+    var isProgressBarStopped = false
     // Set true to deactivate timer logic, slides can be changed only by manually
     var autoScrollEnabled: Bool = true
     // Slide change time period
@@ -60,38 +60,43 @@ class PageIndicatorView: UIView {
             bar.widthAnchor.constraint(equalToConstant: 16)
         ])
         
+        setTimerAndProgressBar()
+    }
+    
+    @objc func updateProgressBar() {
+        checkProgressBarLevel()
+        updateProgressBarLevel()
+    }
+    
+    private func checkProgressBarLevel() {
+        if bar.progress >= 1.00 {
+            sliderViewDelegate?.scroll(to: (currentPage + 1) % pageCount)
+            sliderViewDelegate?.currentPage += 1
+        }
+    }
+    
+    private func updateProgressBarLevel() {
+        if !isProgressBarStopped {
+            bar.progress += CGFloat(timeInterval) / timePeriod
+        }
+    }
+    
+    private func setTimerAndProgressBar() {
         if autoScrollEnabled {
-            timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(updateProgress), userInfo: nil, repeats: true)
+            timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(updateProgressBar), userInfo: nil, repeats: true)
+            bar.progress = 0.00
         } else {
             bar.progress = 1.00
         }
     }
     
-    @objc func updateProgress() {
-        if bar.progress >= 1.00 {
-            sliderViewDelegate?.scroll(to: (currentPage + 1) % pageCount)
-            sliderViewDelegate?.currentPage += 1
-        }
-        
-        if timerCount {
-            bar.progress += CGFloat(timeInterval) / timePeriod
-        }
-    }
-    
     func moveIndicator() {
         self.timer.invalidate()
-        resetProgressBar()
         self.bar.removeFromSuperview()
         self.horizontalStackView.insertArrangedSubview(self.bar, at: currentPage)
-        if self.autoScrollEnabled {
-            self.timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(self.updateProgress), userInfo: nil, repeats: true)
-        }
+        setTimerAndProgressBar()
     }
-    
-    func resetProgressBar() {
-        self.bar.progress = self.autoScrollEnabled ? 0.0 : 1.0
-    }
-    
+        
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

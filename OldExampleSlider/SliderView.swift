@@ -111,9 +111,9 @@ class SliderView: UIView {
     
     @objc func pauseAutoSliding(_ gestureRecognizer: UILongPressGestureRecognizer) {
        if gestureRecognizer.state == .began {
-           pageIndicatorView.timerCount = false
+           pageIndicatorView.isProgressBarStopped = true
        } else if gestureRecognizer.state == .ended {
-           pageIndicatorView.timerCount = true
+           pageIndicatorView.isProgressBarStopped = false
        }
     }
 }
