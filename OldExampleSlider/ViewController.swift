@@ -24,9 +24,9 @@ class ViewController: UIViewController {
 
         NSLayoutConstraint.activate([
             sliderView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            sliderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            sliderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            sliderView.heightAnchor.constraint(equalToConstant: 450)
+            sliderView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            sliderView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            sliderView.heightAnchor.constraint(equalToConstant: ((UIScreen.main.bounds.width - 32) * 3 / 8) + 18)
         ])
 
     }

@@ -64,6 +64,7 @@ class SliderView: UIView {
     
     init() {
         super.init(frame: .zero)
+        backgroundColor = .orange
         setupUI()
         addLongPressGestureRecognizer()
         pageIndicatorView.sliderViewDelegate = self
@@ -74,10 +75,11 @@ class SliderView: UIView {
     }
     
     private func setupUI() {
-        let cellPadding = (frame.width - 300) / 2
         let sliderLayout = UICollectionViewFlowLayout()
         sliderLayout.scrollDirection = .horizontal
-        sliderLayout.itemSize = .init(width: 300, height: 400)
+        let cellPadding: CGFloat = 0
+        let width = UIScreen.main.bounds.width - 32
+        sliderLayout.itemSize = .init(width: width, height: width * 3 / 8)
         sliderLayout.sectionInset = .init(top: 0, left: cellPadding, bottom: 0, right: cellPadding)
         sliderLayout.minimumLineSpacing = cellPadding * 2
         sliderCollectionView.collectionViewLayout = sliderLayout
@@ -87,7 +89,7 @@ class SliderView: UIView {
         sliderCollectionView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         sliderCollectionView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         sliderCollectionView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        sliderCollectionView.heightAnchor.constraint(equalToConstant: 450).isActive = true
+        sliderCollectionView.heightAnchor.constraint(equalToConstant: width * 3 / 8).isActive = true
         
         pageIndicatorView.pageCount = sliderData.count
         pageIndicatorView.translatesAutoresizingMaskIntoConstraints = false
@@ -96,7 +98,8 @@ class SliderView: UIView {
         NSLayoutConstraint.activate([
             pageIndicatorView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
             pageIndicatorView.heightAnchor.constraint(equalToConstant: 4),
-            pageIndicatorView.widthAnchor.constraint(equalTo: widthAnchor)
+            pageIndicatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            pageIndicatorView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
     }
     
@@ -158,10 +161,11 @@ extension SliderView: UICollectionViewDelegate {
 
 extension SliderView {
     public func configureView(with data: [SliderData]) {
-        let cellPadding = (frame.width - 300) / 2
         let sliderLayout = UICollectionViewFlowLayout()
         sliderLayout.scrollDirection = .horizontal
-        sliderLayout.itemSize = .init(width: 300, height: 400)
+        let cellPadding: CGFloat = 0
+        let width = UIScreen.main.bounds.width - 32
+        sliderLayout.itemSize = .init(width: width, height: width * 3 / 8)
         sliderLayout.sectionInset = .init(top: 0, left: cellPadding, bottom: 0, right: cellPadding)
         sliderLayout.minimumLineSpacing = cellPadding * 2
         sliderCollectionView.collectionViewLayout = sliderLayout
